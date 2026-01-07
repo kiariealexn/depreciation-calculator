@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depreciation Calculator | Alex Kiarie Portfolio</title>
+    <meta name="description" content="Professional depreciation calculator with multiple accounting methods. Built by Alex Kiarie for CPA exam preparation and portfolio showcase.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">📉 Depreciation Calculator</h1>
+            <p class="subtitle">Professional-grade accounting tool for asset depreciation analysis</p>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <div class="app-grid">
+            <!-- Input Section -->
+            <section class="input-section card">
+                <h2>Asset Information</h2>
+                <form id="depreciationForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="assetName">Asset Name/Description</label>
+                            <input type="text" id="assetName" placeholder="e.g., Company Vehicle, Office Equipment" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="assetCost">Initial Cost ($)</label>
+                            <input type="number" id="assetCost" min="0" step="0.01" placeholder="10000.00" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="salvageValue">Salvage Value ($)</label>
+                            <input type="number" id="salvageValue" min="0" step="0.01" placeholder="1000.00" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="usefulLife">Useful Life (Years)</label>
+                            <input type="number" id="usefulLife" min="1" max="50" placeholder="5" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="purchaseDate">Purchase Date</label>
+                            <input type="date" id="purchaseDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Depreciation Methods to Compare</label>
+                        <div class="method-selection">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="method" value="straightLine" checked> Straight-Line
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="method" value="decliningBalance200"> Declining Balance (200%)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="method" value="decliningBalance150"> Declining Balance (150%)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="method" value="sumOfYearsDigits"> Sum-of-Years-Digits
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Calculate Depreciation</button>
+                    <button type="button" id="resetBtn" class="btn btn-secondary">Reset Form</button>
+                </form>
+            </section>
+            
+            <!-- Results Section -->
+            <section class="results-section card">
+                <h2>Depreciation Schedule</h2>
+                <div class="results-header">
+                    <div class="asset-summary" id="assetSummary">
+                        <p>Enter asset details and click "Calculate" to see results</p>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="depreciation-table" id="depreciationTable">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Beginning Value</th>
+                                <th>Depreciation Expense</th>
+                                <th>Accumulated Depreciation</th>
+                                <th>Ending Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Results will be populated here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="visualization-container">
+                    <canvas id="depreciationChart" width="400" height="200"></canvas>
+                </div>
+            </section>
+            
+            <!-- Method Explanations -->
+            <section class="explanations-section card">
+                <h2>Accounting Methods Explained</h2>
+                <div class="method-explanation" id="straightLineExplanation">
+                    <h3>Straight-Line Method</h3>
+                    <p>Allocates equal depreciation expense each year over the asset's useful life.</p>
+                    <code>Annual Expense = (Cost - Salvage Value) / Useful Life</code>
+                    <p class="method-use">Best for: Assets with consistent utility over time</p>
+                </div>
+                <!-- Additional explanations will be added for other methods -->
+            </section>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>Built by <strong>Alex Kiarie</strong> | Economics Graduate & Aspiring Developer | CPA Candidate</p>
+            <p>Part of my portfolio to combine finance expertise with software development skills.</p>
+            <div class="footer-links">
+                <a href="https://kiariealexn.github.io" target="_blank">View My Portfolio</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/calculator.js"></script>
+</body>
+</html>
