@@ -387,3 +387,173 @@ input[value="sumOfYearsDigits"]:checked ~ .method-name {
     color: #dc2626;
     font-weight: 600;
 }
+
+/* ============================================
+   MOBILE RESPONSIVENESS FIXES
+   ============================================ */
+
+/* 1. PREVENT HORIZONTAL SCROLLING */
+html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* 2. FIX HEADER ON MOBILE */
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem 0.5rem !important;
+        text-align: center;
+        width: 100vw;
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+    }
+    
+    .header .container {
+        padding: 0 0.75rem !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    .logo {
+        font-size: 1.5rem !important;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        padding: 0 0.5rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem !important;
+        line-height: 1.4;
+        padding: 0 0.5rem;
+    }
+}
+
+/* 3. FIX FOOTER ON MOBILE */
+@media (max-width: 768px) {
+    .footer {
+        padding: 1rem 0.5rem !important;
+        width: 100vw;
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        text-align: center;
+    }
+    
+    .footer .container {
+        padding: 0 0.75rem !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    .footer p {
+        font-size: 0.85rem;
+        line-height: 1.4;
+        margin-bottom: 0.75rem;
+        padding: 0 0.25rem;
+    }
+    
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+    
+    .footer-links a {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+        display: inline-block;
+    }
+}
+
+/* 4. FIX MAIN CONTENT AREA */
+@media (max-width: 768px) {
+    .main-content .container {
+        padding: 0 0.75rem !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    .app-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+        padding: 0 0.25rem;
+    }
+    
+    .card {
+        padding: 1rem !important;
+        margin: 0 -0.25rem;
+        width: calc(100% + 0.5rem);
+    }
+}
+
+/* 5. FIX TABLES ON MOBILE */
+@media (max-width: 768px) {
+    .table-container {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        width: calc(100% + 1rem);
+    }
+    
+    .depreciation-table {
+        min-width: 600px; /* Allow horizontal scroll for wide tables */
+        font-size: 0.8rem;
+    }
+    
+    .depreciation-table th,
+    .depreciation-table td {
+        padding: 0.5rem 0.25rem !important;
+    }
+    
+    .method-data div {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* 6. FIX FORMS ON MOBILE */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem;
+    }
+    
+    .form-group input {
+        padding: 0.6rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .method-selection {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .btn {
+        width: 100% !important;
+        margin-bottom: 0.5rem;
+        padding: 0.75rem !important;
+    }
+    
+    #resetBtn {
+        margin-top: 0.5rem;
+    }
+}
+
+/* 7. EXTRA SMALL PHONES (iPhone 5/SE) */
+@media (max-width: 375px) {
+    .logo {
+        font-size: 1.3rem !important;
+    }
+    
+    .subtitle {
+        font-size: 0.8rem !important;
+    }
+    
+    .card {
+        padding: 0.75rem !important;
+    }
+    
+    h2 {
+        font-size: 1.25rem !important;
+    }
+}
