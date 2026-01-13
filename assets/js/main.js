@@ -86,6 +86,24 @@ function handleCalculate(event) {
     displayResults(results);
     
     // Initialize charts with multiple methods
+    // Temporary placeholder for Phase 3 charts
+    function initializeCharts(results, assetData) {
+    console.log('✅ Calculations complete! Charts coming in Phase 3.');
+    console.log('Methods calculated:', Object.keys(results));
+    
+    // Optional: Show a simple text chart
+    const chartElement = document.getElementById('depreciationChart');
+    if (chartElement && chartElement.getContext) {
+        const ctx = chartElement.getContext('2d');
+        ctx.clearRect(0, 0, chartElement.width, chartElement.height);
+        ctx.font = '16px Inter';
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'center';
+        ctx.fillText('📈 Visual charts coming in Phase 3', 
+                    chartElement.width/2, 
+                    chartElement.height/2);
+    }
+}
     // initializeCharts(results, assetData); // TODO: Phase 3 - Charts
 }
 
