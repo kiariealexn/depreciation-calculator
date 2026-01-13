@@ -49,6 +49,97 @@ function calculateSumOfYearsDigits(assetData) {
     return { method: 'Sum-of-Years-Digits', schedule: [] };
 }
 
+// Declining Balance Method (200% and 150%)
+function calculateDecliningBalance(assetData, rateMultiplier = 2) {
+    const { cost, salvageValue, usefulLife } = assetData;
+    const depreciationRate = rateMultiplier / usefulLife;
+    
+    const schedule = [];
+    let accumulatedDepreciation = 0;
+    let beginningValue = cost;
+    
+    for (let year = 1; year <= usefulLife; year++) {
+        // Calculate depreciation for this year
+        let depreciationExpense = beginningValue * depreciationRate;
+        
+        // Ensure we don't depreciate below salvage value
+        const projectedEndingValue = beginningValue - depreciationExpense;
+        
+        if (projectedEndingValue < salvageValue) {
+            // For the final year, only depreciate down to salvage value
+            depreciationExpense = beginningValue - salvageValue;
+        }
+        
+        // If depreciation would be negative (book value already at/below salvage), set to 0
+        if (depreciationExpense < 0) {
+            depreciationExpense = 0;
+        }
+        
+        accumulatedDepreciation += depreciationExpense;
+        const endingValue = cost - accumulatedDepreciation;
+        
+        // Ensure ending value doesn't go below salvage
+        const finalEndingValue = Math.max(endingValue, salvageValue);
+        
+        schedule.push({
+            year,
+            beginningValue: parseFloat(beginningValue.toFixed(2)),
+            depreciationExpense: parseFloat(depreciationExpense.toFixed(2)),
+            accumulatedDepreciation: parseFloat(accumulatedDepreciation.toFixed(2)),
+            endingValue: parseFloat(finalEndingValue.toFixed(2))
+        });
+        
+        beginningValue = finalEndingValue;
+        
+        // If we've reached salvage value, stop calculating
+        if (finalEndingValue <= salvageValue) {
+            // Fill remaining years with zero depreciation
+            while (schedule.length < usefulLife) {
+                schedule.push({
+                    year: schedule.length + 1,
+                    beginningValue: parseFloat(salvageValue.toFixed(2)),
+                    depreciationExpense: 0,
+                    accumulatedDepreciation: parseFloat(accumulatedDepreciation.toFixed(2)),
+                    endingValue: parseFloat(salvageValue.toFixed(2))
+                });
+            }
+            break;
+        }
+    }
+    
+    return {
+        method: rateMultiplier === 2 ? '200% Declining Balance' : '150% Declining Balance',
+        schedule,
+        totalDepreciation: parseFloat(accumulatedDepreciation.toFixed(2)),
+        rateMultiplier
+    };
+}
+
+// Test function for Declining Balance
+function testDecliningBalance() {
+    console.log('🧪 Testing 200% Declining Balance Method');
+    
+    const testAsset = {
+        cost: 10000,
+        salvageValue: 1000,
+        usefulLife: 5
+    };
+    
+    const result = calculateDecliningBalance(testAsset, 2);
+    
+    console.log('Asset:', testAsset);
+    console.log('Year 1 Depreciation (expected ~$4,000):', result.schedule[0]?.depreciationExpense);
+    console.log('Year 2 Depreciation (expected ~$2,400):', result.schedule[1]?.depreciationExpense);
+    console.log('Total Schedule:', result.schedule);
+    
+    // Quick validation
+    const year1Valid = Math.abs(result.schedule[0]?.depreciationExpense - 4000) < 100;
+    const year2Valid = Math.abs(result.schedule[1]?.depreciationExpense - 2400) < 100;
+    
+    console.log(year1Valid && year2Valid ? '✅ Test PASSED' : '❌ Test FAILED');
+    return result;
+}
+
 // Export for testing
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -57,3 +148,5 @@ if (typeof module !== 'undefined' && module.exports) {
         calculateSumOfYearsDigits
     };
 }
+
+
