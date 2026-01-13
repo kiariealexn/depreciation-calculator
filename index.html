@@ -51,24 +51,32 @@
                             <input type="date" id="purchaseDate" required>
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>Depreciation Methods to Compare</label>
-                        <div class="method-selection">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="method" value="straightLine" checked> Straight-Line
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="method" value="decliningBalance200"> Declining Balance (200%)
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="method" value="decliningBalance150"> Declining Balance (150%)
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="method" value="sumOfYearsDigits"> Sum-of-Years-Digits
-                            </label>
-                        </div>
-                    </div>
+                
+<div class="form-group">
+    <label>Depreciation Methods to Compare</label>
+    <div class="method-selection">
+        <label class="checkbox-label">
+            <input type="checkbox" name="method" value="straightLine" checked> 
+            <span class="method-name">Straight-Line</span>
+            <span class="method-badge">Basic</span>
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" name="method" value="decliningBalance200"> 
+            <span class="method-name">Declining Balance (200%)</span>
+            <span class="method-badge">Accelerated</span>
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" name="method" value="decliningBalance150"> 
+            <span class="method-name">Declining Balance (150%)</span>
+            <span class="method-badge">Accelerated</span>
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" name="method" value="sumOfYearsDigits"> 
+            <span class="method-name">Sum-of-Years-Digits</span>
+            <span class="method-badge">Accelerated</span>
+        </label>
+    </div>
+</div>
                     
                     <button type="submit" class="btn btn-primary">Calculate Depreciation</button>
                     <button type="button" id="resetBtn" class="btn btn-secondary">Reset Form</button>
