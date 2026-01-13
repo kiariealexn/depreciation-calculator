@@ -86,7 +86,7 @@ function handleCalculate(event) {
     displayResults(results);
     
     // Initialize charts with multiple methods
-    initializeCharts(results, assetData);
+    // initializeCharts(results, assetData); // TODO: Phase 3 - Charts
 }
 
 function showErrors(errors) {
