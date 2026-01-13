@@ -65,19 +65,28 @@ function handleCalculate(event) {
     // Update asset summary
     updateAssetSummary(assetData);
     
-    // Calculate and display results
+    // Calculate results for selected methods
     const results = {};
     
     if (selectedMethods.includes('straightLine')) {
         results.straightLine = calculateStraightLine(assetData);
     }
     
-    // TODO: Add other methods in Phase 2 & 3
+    if (selectedMethods.includes('decliningBalance200')) {
+        results.decliningBalance200 = calculateDecliningBalance(assetData, 2);
+    }
+    
+    if (selectedMethods.includes('decliningBalance150')) {
+        results.decliningBalance150 = calculateDecliningBalance(assetData, 1.5);
+    }
+    
+    // TODO: Add sumOfYearsDigits in Phase 2B
     
     // Display results
-    displayResults(results.straightLine || { schedule: [] });
+    displayResults(results);
     
-    // TODO: Initialize charts in Phase 3
+    // Initialize charts with multiple methods
+    initializeCharts(results, assetData);
 }
 
 function showErrors(errors) {
@@ -133,23 +142,59 @@ function updateAssetSummary(assetData) {
 }
 
 function displayResults(results) {
+    const depreciationTable = document.getElementById('depreciationTable').querySelector('tbody');
+    
     // Clear existing table rows
     depreciationTable.innerHTML = '';
     
-    // Create new rows
-    results.schedule.forEach(yearData => {
+    // Get the first method's schedule to know how many years
+    const firstMethodKey = Object.keys(results)[0];
+    if (!firstMethodKey) return;
+    
+    const yearCount = results[firstMethodKey].schedule.length;
+    
+    // Create header for method comparison
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = '<th colspan="5" class="comparison-header">Depreciation Schedule Comparison</th>';
+    depreciationTable.appendChild(headerRow);
+    
+    // Create year rows
+    for (let year = 0; year < yearCount; year++) {
         const row = document.createElement('tr');
         
-        row.innerHTML = `
-            <td>${yearData.year}</td>
-            <td>$${yearData.beginningValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-            <td>$${yearData.depreciationExpense.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-            <td>$${yearData.accumulatedDepreciation.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-            <td>$${yearData.endingValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-        `;
+        let rowHTML = `<td>Year ${year + 1}</td>`;
         
+        // Add data for each selected method
+        Object.keys(results).forEach(methodKey => {
+            const yearData = results[methodKey].schedule[year];
+            if (yearData) {
+                rowHTML += `
+                    <td class="method-data">
+                        <div class="method-label">${results[methodKey].method}</div>
+                        <div>BV: $${yearData.beginningValue.toLocaleString()}</div>
+                        <div>Exp: $${yearData.depreciationExpense.toLocaleString()}</div>
+                        <div>Acc: $${yearData.accumulatedDepreciation.toLocaleString()}</div>
+                        <div>EV: $${yearData.endingValue.toLocaleString()}</div>
+                    </td>
+                `;
+            }
+        });
+        
+        // If only one method selected, use the original format
+        if (Object.keys(results).length === 1) {
+            const yearData = results[firstMethodKey].schedule[year];
+            rowHTML = `
+                <td>${yearData.year}</td>
+                <td>$${yearData.beginningValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                <td>$${yearData.depreciationExpense.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                <td>$${yearData.accumulatedDepreciation.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                <td>$${yearData.endingValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+            `;
+        }
+        
+        row.innerHTML = rowHTML;
         depreciationTable.appendChild(row);
-    });
+    }
 }
 
 function handleReset() {
