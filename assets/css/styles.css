@@ -338,3 +338,52 @@ h3 { font-size: 1.25rem; }
         border: 1px solid #ddd;
     }
 }
+
+/* Method Selection Enhancements */
+.method-badge {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    background: #e2e8f0;
+    color: #4a5568;
+    border-radius: 10px;
+    margin-left: 0.5rem;
+    font-weight: 600;
+}
+
+.method-name {
+    font-weight: 500;
+}
+
+/* Results Table for Multiple Methods */
+.comparison-header {
+    background: #4f46e5;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.method-data {
+    border-left: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+.method-label {
+    font-weight: 600;
+    color: #4f46e5;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.method-data div {
+    font-size: 0.85rem;
+    margin: 0.1rem 0;
+}
+
+/* Highlight accelerated methods */
+input[value="decliningBalance200"]:checked ~ .method-name,
+input[value="decliningBalance150"]:checked ~ .method-name,
+input[value="sumOfYearsDigits"]:checked ~ .method-name {
+    color: #dc2626;
+    font-weight: 600;
+}
