@@ -104,8 +104,6 @@ function handleCalculate(event) {
                     chartElement.height/2);
     }
 }
-    // initializeCharts(results, assetData); // TODO: Phase 3 - Charts
-}
 
 function showErrors(errors) {
     clearErrors();
