@@ -1,28 +1,30 @@
 {
   "name": "Depreciation Calculator",
   "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:0-18",
-  
+  "forwardPorts": [8080, 5500],
+  "postCreateCommand": "echo '🚀 Depreciation Calculator environment ready!'",
   "customizations": {
     "vscode": {
       "extensions": [
         "ritwickdey.LiveServer",
         "esbenp.prettier-vscode",
         "ms-vsliveshare.vsliveshare",
-        "oderwat.indent-rainbow"
+        "oderwat.indent-rainbow",
+        "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "files.autoSave": "afterDelay"
+        "files.autoSave": "afterDelay",
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
       }
     }
   },
-  
-  "forwardPorts": [8080, 5500],
-  
-  "postCreateCommand": "echo 'Codespace ready for Depreciation Calculator project!'",
-  
   "features": {
-    "ghcr.io/devcontainers/features/github-cli:1": {}
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
   }
 }
