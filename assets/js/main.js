@@ -27,37 +27,41 @@ function handleCalculate(event) {
     const selectedMethods = Array.from(document.querySelectorAll('input[name="method"]:checked'))
         .map(checkbox => checkbox.value);
     
-    // Validate inputs
-    const errors = [];
-    
-    if (!assetData.name) {
-        errors.push("Please enter an asset name");
-    }
-    
-    if (isNaN(assetData.cost) || assetData.cost <= 0) {
-        errors.push("Please enter a valid positive cost amount");
-    }
-    
-    if (isNaN(assetData.salvageValue) || assetData.salvageValue < 0) {
-        errors.push("Salvage value cannot be negative");
-    }
-    
-    if (assetData.cost <= assetData.salvageValue) {
-        errors.push("Cost must be greater than salvage value");
-    }
-    
-    if (isNaN(assetData.usefulLife) || assetData.usefulLife < 1 || assetData.usefulLife > 50) {
-        errors.push("Useful life must be between 1 and 50 years");
-    }
-    
-    if (selectedMethods.length === 0) {
-        errors.push("Please select at least one depreciation method");
-    }
-    
-    if (errors.length > 0) {
-        showErrors(errors);
-        return;
-    }
+   // Enhanced validation section
+const errors = [];
+
+if (!assetData.name) {
+    errors.push("Please enter an asset name");
+}
+
+if (isNaN(assetData.cost) || assetData.cost <= 0) {
+    errors.push("Please enter a valid positive cost amount");
+}
+
+if (isNaN(assetData.salvageValue) || assetData.salvageValue < 0) {
+    errors.push("Salvage value cannot be negative");
+}
+
+if (assetData.salvageValue > assetData.cost) {
+    errors.push("Salvage value cannot exceed asset cost");
+}
+
+if (isNaN(assetData.usefulLife) || assetData.usefulLife < 1) {
+    errors.push("Useful life must be at least 1 year");
+}
+
+if (assetData.usefulLife > 50) {
+    errors.push("Useful life cannot exceed 50 years");
+}
+
+// CPA Exam standard: useful life should be reasonable
+if (assetData.usefulLife > 30 && assetData.cost < 100000) {
+    errors.push("Useful life seems unusually long for this asset value");
+}
+
+if (selectedMethods.length === 0) {
+    errors.push("Please select at least one depreciation method");
+}
     
     // Clear any previous errors
     clearErrors();
