@@ -557,3 +557,27 @@ html, body {
         font-size: 1.25rem !important;
     }
 }
+
+/* Method Explanation Enhancements */
+.rate-examples {
+    background: #f8fafc;
+    border-left: 3px solid #7c3aed;
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+    border-radius: 0 4px 4px 0;
+}
+
+.rate-examples p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+}
+
+.method-note {
+    background: #fef3c7;
+    border-left: 3px solid #d97706;
+    padding: 0.75rem;
+    margin-top: 0.75rem;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.85rem;
+    color: #92400e;
+}
