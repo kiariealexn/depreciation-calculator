@@ -1,32 +1,30 @@
 # Depreciation Calculator
 
-A professional web-based depreciation calculator built with HTML, CSS, and JavaScript. This project demonstrates the implementation of multiple accounting depreciation methods in a clean, responsive interface.
+A professional web-based depreciation calculator implementing multiple accounting methods. Built to combine finance expertise with software development skills.
 
-## Features
+## 🌐 Live Demo
+**[https://kiariealexn.github.io/depreciation-calculator/](https://kiariealexn.github.io/depreciation-calculator/)**
 
-- **Multiple Depreciation Methods:**
-  - Straight-Line Method
-  - Declining Balance Method (200% & 150%)
-  - Sum-of-Years-Digits Method
-  - Units of Production (Future enhancement)
+## 📊 Features
 
-- **Professional Interface:**
-  - Responsive design (mobile, tablet, desktop)
-  - Clean, accessible UI
-  - Interactive data visualization with Chart.js
-  - Export functionality (CSV/PDF)
+### Depreciation Methods
+- **Straight-Line Method** - Equal annual depreciation
+- **Declining Balance Method** - 200% & 150% accelerated depreciation
+- **Sum-of-Years-Digits** - *Coming in Phase 3*
 
-- **Educational Value:**
-  - Detailed explanations of each method
-  - Year-by-year depreciation schedules
-  - Side-by-side method comparison
+### Technical Features
+- ✅ CPA-level calculation accuracy
+- ✅ Multiple method comparison side-by-side
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Form validation with helpful error messages
+- ✅ Clean, professional UI suitable for portfolio
+- ✅ Chart.js visualizations (*Phase 3*)
+- ✅ Export functionality (*Phase 3*)
 
-## Live Demo
+## 🚀 Getting Started
 
-[GitHub Pages Link - To be added after deployment]
-
-## Installation & Setup
-
+### Local Development
 1. Clone the repository:
-```bash
-git clone https://github.com/kiariealexn/depreciation-calculator.git
+   ```bash
+   git clone https://github.com/kiariealexn/depreciation-calculator.git
+   cd depreciation-calculator
