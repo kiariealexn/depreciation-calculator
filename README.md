@@ -41,4 +41,4 @@ Visit the [live demo](https://kiariealexn.github.io/depreciation-calculator/)
 ```bash
 git clone https://github.com/kiariealexn/depreciation-calculator.git
 cd depreciation-calculator
-open index.html  # or double-click index.html
+open index.html or double-click index.html
