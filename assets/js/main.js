@@ -2,12 +2,13 @@ function handleCalculate(event) {
     event.preventDefault();
     console.log('📝 Form submitted!');
     
-    // Get form values
+    // Get form values - allow decimals
     const assetData = {
         name: document.getElementById('assetName').value.trim(),
+        // Use parseFloat for all numeric values to accept decimals
         cost: parseFloat(document.getElementById('assetCost').value),
         salvageValue: parseFloat(document.getElementById('salvageValue').value),
-        usefulLife: parseInt(document.getElementById('usefulLife').value),
+        usefulLife: parseFloat(document.getElementById('usefulLife').value), // Changed to parseFloat
         purchaseDate: document.getElementById('purchaseDate').value
     };
     
@@ -15,17 +16,19 @@ function handleCalculate(event) {
     const selectedMethods = Array.from(document.querySelectorAll('input[name="method"]:checked'))
         .map(checkbox => checkbox.value);
     
-    // Enhanced validation section
+    // Enhanced validation section with decimal support
     const errors = [];
 
     if (!assetData.name) {
         errors.push("Please enter an asset name");
     }
 
+    // Cost validation - allow decimals
     if (isNaN(assetData.cost) || assetData.cost <= 0) {
-        errors.push("Please enter a valid positive cost amount");
+        errors.push("Please enter a valid positive cost amount (e.g., 10000.00)");
     }
 
+    // Salvage validation - allow decimals
     if (isNaN(assetData.salvageValue) || assetData.salvageValue < 0) {
         errors.push("Salvage value cannot be negative");
     }
@@ -34,12 +37,19 @@ function handleCalculate(event) {
         errors.push("Salvage value cannot exceed asset cost");
     }
 
-    if (isNaN(assetData.usefulLife) || assetData.usefulLife < 1) {
-        errors.push("Useful life must be at least 1 year");
+    // Useful life validation - allow 1 decimal place
+    if (isNaN(assetData.usefulLife) || assetData.usefulLife < 0.1) {
+        errors.push("Useful life must be at least 0.1 years (minimum 1 month)");
     }
 
     if (assetData.usefulLife > 50) {
         errors.push("Useful life cannot exceed 50 years");
+    }
+
+    // Validate decimal precision
+    const usefulLifeDecimals = assetData.usefulLife.toString().split('.')[1];
+    if (usefulLifeDecimals && usefulLifeDecimals.length > 1) {
+        errors.push("Useful life can only have one decimal place (e.g., 5.5 years)");
     }
 
     // CPA Exam standard: useful life should be reasonable
@@ -51,10 +61,10 @@ function handleCalculate(event) {
         errors.push("Please select at least one depreciation method");
     }
     
-    // ==== FIX 2: Handle validation errors ====
+    // Handle validation errors
     if (errors.length > 0) {
         showErrors(errors);
-        return; // Stop execution if there are errors
+        return;
     }
     
     // Clear any previous errors
@@ -81,9 +91,9 @@ function handleCalculate(event) {
     // Display results
     displayResults(results);
     
-    // ==== FIX 3: Initialize charts ====
+    // Initialize charts
     initializeCharts(results, assetData);
-} // ==== FIX 1: Added missing closing brace ====
+} 
 
 // ===== REST OF YOUR FUNCTIONS =====
 
