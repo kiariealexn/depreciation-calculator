@@ -1,5 +1,5 @@
 // Pure calculation functions - no DOM manipulation
-
+// Straight-Line Method with decimal years support
 function calculateStraightLine(assetData) {
     const { cost, salvageValue, usefulLife } = assetData;
     const depreciableBase = cost - salvageValue;
@@ -9,10 +9,11 @@ function calculateStraightLine(assetData) {
     let accumulatedDepreciation = 0;
     let beginningValue = cost;
     
-    for (let year = 1; year <= usefulLife; year++) {
-        // For the last year, adjust depreciation to ensure ending value = salvage value
-        const isLastYear = year === usefulLife;
-        const depreciationExpense = isLastYear 
+    // Handle partial years - create schedule for each year segment
+    for (let year = 1; year <= Math.ceil(usefulLife); year++) {
+        // For partial last year
+        const isPartialYear = year > usefulLife;
+        const depreciationExpense = isPartialYear 
             ? depreciableBase - accumulatedDepreciation
             : annualDepreciation;
         
@@ -20,14 +21,17 @@ function calculateStraightLine(assetData) {
         const endingValue = cost - accumulatedDepreciation;
         
         schedule.push({
-            year,
+            year: year + (isPartialYear ? '*' : ''), // Mark partial years
             beginningValue: parseFloat(beginningValue.toFixed(2)),
             depreciationExpense: parseFloat(depreciationExpense.toFixed(2)),
             accumulatedDepreciation: parseFloat(accumulatedDepreciation.toFixed(2)),
-            endingValue: parseFloat(endingValue.toFixed(2))
+            endingValue: parseFloat(Math.max(endingValue, salvageValue).toFixed(2))
         });
         
-        beginningValue = endingValue;
+        beginningValue = Math.max(endingValue, salvageValue);
+        
+        // Stop if we've reached the end
+        if (isPartialYear) break;
     }
     
     return {
@@ -38,18 +42,7 @@ function calculateStraightLine(assetData) {
     };
 }
 
-// TODO: Add these functions in Phase 2
-function calculateDecliningBalance(assetData, rateMultiplier = 2) {
-    // To be implemented in Phase 2
-    return { method: 'Declining Balance', schedule: [] };
-}
-
-function calculateSumOfYearsDigits(assetData) {
-    // To be implemented in Phase 2
-    return { method: 'Sum-of-Years-Digits', schedule: [] };
-}
-
-// Declining Balance Method (200% and 150%)
+// Declining Balance Method with decimal years support
 function calculateDecliningBalance(assetData, rateMultiplier = 2) {
     const { cost, salvageValue, usefulLife } = assetData;
     const depreciationRate = rateMultiplier / usefulLife;
@@ -57,20 +50,26 @@ function calculateDecliningBalance(assetData, rateMultiplier = 2) {
     const schedule = [];
     let accumulatedDepreciation = 0;
     let beginningValue = cost;
+    let yearCounter = 1;
     
-    for (let year = 1; year <= usefulLife; year++) {
+    while (yearCounter <= Math.ceil(usefulLife) && beginningValue > salvageValue) {
         // Calculate depreciation for this year
         let depreciationExpense = beginningValue * depreciationRate;
+        
+        // Adjust for partial last year
+        const isPartialYear = yearCounter > usefulLife;
+        if (isPartialYear) {
+            depreciationExpense = beginningValue - salvageValue;
+        }
         
         // Ensure we don't depreciate below salvage value
         const projectedEndingValue = beginningValue - depreciationExpense;
         
         if (projectedEndingValue < salvageValue) {
-            // For the final year, only depreciate down to salvage value
             depreciationExpense = beginningValue - salvageValue;
         }
         
-        // If depreciation would be negative (book value already at/below salvage), set to 0
+        // If depreciation would be negative, set to 0
         if (depreciationExpense < 0) {
             depreciationExpense = 0;
         }
@@ -82,7 +81,7 @@ function calculateDecliningBalance(assetData, rateMultiplier = 2) {
         const finalEndingValue = Math.max(endingValue, salvageValue);
         
         schedule.push({
-            year,
+            year: yearCounter + (isPartialYear ? '*' : ''), // Mark partial years
             beginningValue: parseFloat(beginningValue.toFixed(2)),
             depreciationExpense: parseFloat(depreciationExpense.toFixed(2)),
             accumulatedDepreciation: parseFloat(accumulatedDepreciation.toFixed(2)),
@@ -90,19 +89,10 @@ function calculateDecliningBalance(assetData, rateMultiplier = 2) {
         });
         
         beginningValue = finalEndingValue;
+        yearCounter++;
         
-        // If we've reached salvage value, stop calculating
+        // Stop if we've reached salvage value
         if (finalEndingValue <= salvageValue) {
-            // Fill remaining years with zero depreciation
-            while (schedule.length < usefulLife) {
-                schedule.push({
-                    year: schedule.length + 1,
-                    beginningValue: parseFloat(salvageValue.toFixed(2)),
-                    depreciationExpense: 0,
-                    accumulatedDepreciation: parseFloat(accumulatedDepreciation.toFixed(2)),
-                    endingValue: parseFloat(salvageValue.toFixed(2))
-                });
-            }
             break;
         }
     }
