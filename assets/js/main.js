@@ -1,18 +1,6 @@
-// DOM Elements
-const form = document.getElementById('depreciationForm');
-const resetBtn = document.getElementById('resetBtn');
-const depreciationTable = document.getElementById('depreciationTable').querySelector('tbody');
-const assetSummary = document.getElementById('assetSummary');
-
-// Initialize date to today
-document.getElementById('purchaseDate').valueAsDate = new Date();
-
-// Event Listeners
-form.addEventListener('submit', handleCalculate);
-resetBtn.addEventListener('click', handleReset);
-
 function handleCalculate(event) {
     event.preventDefault();
+    console.log('📝 Form submitted!');
     
     // Get form values
     const assetData = {
@@ -27,41 +15,47 @@ function handleCalculate(event) {
     const selectedMethods = Array.from(document.querySelectorAll('input[name="method"]:checked'))
         .map(checkbox => checkbox.value);
     
-   // Enhanced validation section
-const errors = [];
+    // Enhanced validation section
+    const errors = [];
 
-if (!assetData.name) {
-    errors.push("Please enter an asset name");
-}
+    if (!assetData.name) {
+        errors.push("Please enter an asset name");
+    }
 
-if (isNaN(assetData.cost) || assetData.cost <= 0) {
-    errors.push("Please enter a valid positive cost amount");
-}
+    if (isNaN(assetData.cost) || assetData.cost <= 0) {
+        errors.push("Please enter a valid positive cost amount");
+    }
 
-if (isNaN(assetData.salvageValue) || assetData.salvageValue < 0) {
-    errors.push("Salvage value cannot be negative");
-}
+    if (isNaN(assetData.salvageValue) || assetData.salvageValue < 0) {
+        errors.push("Salvage value cannot be negative");
+    }
 
-if (assetData.salvageValue > assetData.cost) {
-    errors.push("Salvage value cannot exceed asset cost");
-}
+    if (assetData.salvageValue > assetData.cost) {
+        errors.push("Salvage value cannot exceed asset cost");
+    }
 
-if (isNaN(assetData.usefulLife) || assetData.usefulLife < 1) {
-    errors.push("Useful life must be at least 1 year");
-}
+    if (isNaN(assetData.usefulLife) || assetData.usefulLife < 1) {
+        errors.push("Useful life must be at least 1 year");
+    }
 
-if (assetData.usefulLife > 50) {
-    errors.push("Useful life cannot exceed 50 years");
-}
+    if (assetData.usefulLife > 50) {
+        errors.push("Useful life cannot exceed 50 years");
+    }
 
-// CPA Exam standard: useful life should be reasonable
-if (assetData.usefulLife > 30 && assetData.cost < 100000) {
-    errors.push("Useful life seems unusually long for this asset value");
-}
+    // CPA Exam standard: useful life should be reasonable
+    if (assetData.usefulLife > 30 && assetData.cost < 100000) {
+        errors.push("Useful life seems unusually long for this asset value");
+    }
 
-if (selectedMethods.length === 0) {
-    errors.push("Please select at least one depreciation method");
-}
+    if (selectedMethods.length === 0) {
+        errors.push("Please select at least one depreciation method");
+    }
+    
+    // ==== FIX 2: Handle validation errors ====
+    if (errors.length > 0) {
+        showErrors(errors);
+        return; // Stop execution if there are errors
+    }
     
     // Clear any previous errors
     clearErrors();
@@ -84,30 +78,14 @@ if (selectedMethods.length === 0) {
         results.decliningBalance150 = calculateDecliningBalance(assetData, 1.5);
     }
     
-    // TODO: Add sumOfYearsDigits in Phase 2B
-    
     // Display results
     displayResults(results);
     
-    // Initialize charts with multiple methods
-    // Temporary placeholder for Phase 3 charts
-    function initializeCharts(results, assetData) {
-    console.log('✅ Calculations complete! Charts coming in Phase 3.');
-    console.log('Methods calculated:', Object.keys(results));
-    
-    // Optional: Show a simple text chart
-    const chartElement = document.getElementById('depreciationChart');
-    if (chartElement && chartElement.getContext) {
-        const ctx = chartElement.getContext('2d');
-        ctx.clearRect(0, 0, chartElement.width, chartElement.height);
-        ctx.font = '16px Inter';
-        ctx.fillStyle = '#64748b';
-        ctx.textAlign = 'center';
-        ctx.fillText('📈 Visual charts coming in Phase 3', 
-                    chartElement.width/2, 
-                    chartElement.height/2);
-    }
-}
+    // ==== FIX 3: Initialize charts ====
+    initializeCharts(results, assetData);
+} // ==== FIX 1: Added missing closing brace ====
+
+// ===== REST OF YOUR FUNCTIONS =====
 
 function showErrors(errors) {
     clearErrors();
@@ -136,6 +114,8 @@ function clearErrors() {
 }
 
 function updateAssetSummary(assetData) {
+    // ==== FIX: Get assetSummary element inside function ====
+    const assetSummary = document.getElementById('assetSummary');
     const depreciationBase = assetData.cost - assetData.salvageValue;
     
     assetSummary.innerHTML = `
@@ -218,10 +198,72 @@ function displayResults(results) {
 }
 
 function handleReset() {
-    form.reset();
-    depreciationTable.innerHTML = '';
-    assetSummary.innerHTML = '<p>Enter asset details and click "Calculate" to see results</p>';
-    document.getElementById('purchaseDate').valueAsDate = new Date();
+    console.log('🔄 Form reset');
     
-    // TODO: Clear charts in Phase 3
+    // ==== FIX: Get elements inside function ====
+    const form = document.getElementById('depreciationForm');
+    const depreciationTable = document.getElementById('depreciationTable').querySelector('tbody');
+    const assetSummary = document.getElementById('assetSummary');
+    const purchaseDate = document.getElementById('purchaseDate');
+    
+    if (form) form.reset();
+    if (depreciationTable) depreciationTable.innerHTML = '';
+    if (assetSummary) assetSummary.innerHTML = '<p>Enter asset details and click "Calculate" to see results</p>';
+    if (purchaseDate) purchaseDate.valueAsDate = new Date();
+    
+    clearErrors();
 }
+
+// Temporary placeholder for Phase 3 charts
+function initializeCharts(results, assetData) {
+    console.log('📊 Chart data ready for Phase 3');
+    console.log('Results available:', Object.keys(results));
+    
+    // Optional: Show a simple text chart
+    const chartElement = document.getElementById('depreciationChart');
+    if (chartElement && chartElement.getContext) {
+        const ctx = chartElement.getContext('2d');
+        ctx.clearRect(0, 0, chartElement.width, chartElement.height);
+        ctx.font = '16px Inter';
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'center';
+        ctx.fillText('📈 Charts coming in Phase 3', 
+                    chartElement.width/2, 
+                    chartElement.height/2);
+    }
+}
+
+// ===== DOM Content Loaded =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM loaded - Initializing calculator...');
+    
+    // DOM Elements - they only exist AFTER DOM loads
+    const form = document.getElementById('depreciationForm');
+    const resetBtn = document.getElementById('resetBtn');
+    const purchaseDate = document.getElementById('purchaseDate');
+    
+    // Initialize date to today
+    if (purchaseDate) {
+        purchaseDate.valueAsDate = new Date();
+        console.log('📅 Date initialized to today');
+    }
+    
+    // Event Listeners - only attach if elements exist
+    if (form) {
+        form.addEventListener('submit', handleCalculate);
+        console.log('✅ Form event listener attached');
+    } else {
+        console.error('❌ Form element not found!');
+    }
+    
+    if (resetBtn) {
+        resetBtn.addEventListener('click', handleReset);
+        console.log('✅ Reset button listener attached');
+    }
+    
+    // Quick debug check
+    console.log('🔧 Functions available:');
+    console.log('- handleCalculate:', typeof handleCalculate);
+    console.log('- calculateStraightLine:', typeof calculateStraightLine);
+    console.log('- calculateDecliningBalance:', typeof calculateDecliningBalance);
+});
