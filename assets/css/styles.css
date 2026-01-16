@@ -633,6 +633,7 @@ input[type="number"] {
 }
 
 /* Visually hidden class for screen readers */
+/* Add to styles.css */
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -643,4 +644,11 @@ input[type="number"] {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark-color);
 }
