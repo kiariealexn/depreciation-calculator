@@ -53,12 +53,18 @@
                     </div>
                 
 <div class="form-group">
-    <label>Depreciation Methods to Compare</label>
-    <div class="method-selection">
+    <!-- Add a proper label with 'for' attribute pointing to a hidden field -->
+    <label for="methodSelection" class="form-label">Depreciation Methods to Compare</label>
+    <!-- Hidden span for screen readers -->
+    <span id="methodSelection" class="visually-hidden">Select depreciation methods to compare</span>
+    
+    <div class="method-selection" role="group" aria-labelledby="methodSelection">
+        </label> 
         <label class="checkbox-label">
             <input type="checkbox" name="method" value="straightLine" checked> 
             <span class="method-name">Straight-Line</span>
             <span class="method-badge">Basic</span>
+        </label>
         </label>
         <label class="checkbox-label">
             <input type="checkbox" name="method" value="decliningBalance200"> 
