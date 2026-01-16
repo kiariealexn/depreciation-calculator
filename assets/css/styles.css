@@ -599,7 +599,40 @@ input[type="number"] {
     font-feature-settings: "tnum";
 }
 
-/* Add to styles.css */
+/* Method checkbox styling - Add this to your existing CSS */
+.method-checkbox:checked ~ .method-name {
+    color: #dc2626;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+/* Optional: Different colors for different methods */
+.method-checkbox[value="straightLine"]:checked ~ .method-name {
+    color: #2563eb; /* Blue for Straight-Line */
+}
+
+.method-checkbox[value="decliningBalance200"]:checked ~ .method-name,
+.method-checkbox[value="decliningBalance150"]:checked ~ .method-name {
+    color: #dc2626; /* Red for Declining Balance */
+}
+
+.method-checkbox[value="sumOfYearsDigits"]:checked ~ .method-name {
+    color: #059669; /* Green for Sum-of-Years */
+}
+
+/* Add visual feedback on hover */
+.checkbox-label:hover .method-name {
+    color: #4f46e5;
+}
+
+/* Accessibility focus styles */
+.method-checkbox:focus ~ .method-name {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Visually hidden class for screen readers */
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -610,11 +643,4 @@ input[type="number"] {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-}
-
-.form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--dark-color);
 }
