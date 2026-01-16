@@ -581,3 +581,20 @@ html, body {
     font-size: 0.85rem;
     color: #92400e;
 }
+
+.partial-year::after {
+    content: " *";
+    color: #dc2626;
+    font-size: 0.8em;
+}
+
+/* Ensure number inputs show decimals properly */
+input[type="number"] {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Better alignment for decimal numbers in tables */
+.method-data div, .summary-value {
+    text-align: right;
+    font-feature-settings: "tnum";
+}
