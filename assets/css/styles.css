@@ -381,6 +381,7 @@ h3 { font-size: 1.25rem; }
 }
 
 /* Highlight accelerated methods */
+input[value="straightLine"]:checked ~ .method-name,
 input[value="decliningBalance200"]:checked ~ .method-name,
 input[value="decliningBalance150"]:checked ~ .method-name,
 input[value="sumOfYearsDigits"]:checked ~ .method-name {
