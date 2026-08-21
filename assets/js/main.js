@@ -88,6 +88,11 @@ function handleCalculate(event) {
         results.decliningBalance150 = calculateDecliningBalance(assetData, 1.5);
     }
     
+    // NEW: Calculate Sum-of-the-Years-Digits if selected
+    if (selectedMethods.includes('sumOfYearsDigits')) {
+        results.sumOfYearsDigits = calculateSumOfYearsDigits(assetData);
+    }
+    
     // Display results
     displayResults(results);
     
@@ -276,4 +281,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('- handleCalculate:', typeof handleCalculate);
     console.log('- calculateStraightLine:', typeof calculateStraightLine);
     console.log('- calculateDecliningBalance:', typeof calculateDecliningBalance);
+    console.log('- calculateSumOfYearsDigits:', typeof calculateSumOfYearsDigits);
 });
