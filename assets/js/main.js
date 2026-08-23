@@ -96,11 +96,11 @@ function handleCalculate(event) {
     // Display results
     displayResults(results);
     
-    // Initialize charts
-    initializeCharts(results, assetData);
+    // Initialize charts with the new charting system
+    initializeAdvancedCharts(results, assetData);
 } 
 
-// ===== REST OF YOUR FUNCTIONS =====
+// ===== REST OF FUNCTIONS =====
 
 function showErrors(errors) {
     clearErrors();
@@ -229,23 +229,189 @@ function handleReset() {
     clearErrors();
 }
 
-// Temporary placeholder for Phase 3 charts
-function initializeCharts(results, assetData) {
-    console.log('📊 Chart data ready for Phase 3');
-    console.log('Results available:', Object.keys(results));
+/**
+ * NEW: Initialize advanced depreciation comparison charts
+ * Replaces the old placeholder chart system with production-grade Chart.js visualizations
+ */
+function initializeAdvancedCharts(results, assetData) {
+    console.log('📊 Initializing advanced depreciation charts...');
     
-    // Optional: Show a simple text chart
-    const chartElement = document.getElementById('depreciationChart');
-    if (chartElement && chartElement.getContext) {
-        const ctx = chartElement.getContext('2d');
-        ctx.clearRect(0, 0, chartElement.width, chartElement.height);
-        ctx.font = '16px Inter';
-        ctx.fillStyle = '#64748b';
-        ctx.textAlign = 'center';
-        ctx.fillText('📈 Charts coming in Phase 3', 
-                    chartElement.width/2, 
-                    chartElement.height/2);
+    if (Object.keys(results).length === 0) return;
+    
+    // Extract chart data from results
+    const chartData = extractChartData(results, assetData);
+    
+    if (!chartData) {
+        console.error('Could not extract chart data');
+        return;
     }
+    
+    // Initialize each chart
+    initializeAnnualExpenseChart(chartData);
+    initializeBookValueChart(chartData);
+    initializeCumulativeDepreciationChart(chartData);
+}
+
+/**
+ * Extract chart-ready data from calculation results
+ */
+function extractChartData(results, assetData) {
+    const methodNames = [];
+    const methodData = {};
+    
+    // Collect data from each method
+    const methodMap = {
+        'straightLine': 'Straight-Line',
+        'decliningBalance200': 'DB 200%',
+        'decliningBalance150': 'DB 150%',
+        'sumOfYearsDigits': 'SYD'
+    };
+    
+    Object.entries(results).forEach(([key, result]) => {
+        const displayName = methodMap[key] || result.method;
+        methodNames.push(displayName);
+        methodData[displayName] = result.schedule;
+    });
+    
+    if (methodNames.length === 0) return null;
+    
+    // Get year labels from the first method
+    const firstMethod = Object.values(results)[0];
+    const yearLabels = firstMethod.schedule.map(row => {
+        if (typeof row.year === 'string' && row.year.includes('*')) {
+            return row.year;
+        }
+        return `Year ${row.year}`;
+    });
+    
+    return {
+        yearLabels,
+        methodNames,
+        methodData,
+        cost: assetData.cost,
+        salvageValue: assetData.salvageValue,
+        usefulLife: assetData.usefulLife
+    };
+}
+
+// Chart instances (global scope for management)
+let depreciationCharts = {
+    expenseChart: null,
+    bookValueChart: null,
+    cumulativeChart: null
+};
+
+/**
+ * Create Annual Depreciation Expense Chart
+ */
+function initializeAnnualExpenseChart(chartData) {
+    const canvasId = 'depreciationChart';
+    let canvas = document.getElementById(canvasId);
+    
+    if (!canvas) {
+        console.warn(`Canvas ${canvasId} not found, skipping annual expense chart`);
+        return;
+    }
+    
+    // Destroy existing chart if it exists
+    if (depreciationCharts.expenseChart) {
+        depreciationCharts.expenseChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Prepare datasets for each method
+    const datasets = [];
+    const colors = ['#3b82f6', '#ef4444', '#f59e0b', '#10b981']; // Blue, Red, Amber, Green
+    
+    let colorIndex = 0;
+    chartData.methodNames.forEach(methodName => {
+        const expenses = chartData.methodData[methodName].map(row => row.depreciationExpense);
+        const borderColor = colors[colorIndex % colors.length];
+        
+        datasets.push({
+            label: methodName,
+            data: expenses,
+            borderColor: borderColor,
+            backgroundColor: borderColor + '20', // Add transparency
+            borderWidth: 2.5,
+            pointRadius: 5,
+            pointBackgroundColor: borderColor,
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            tension: 0.3,
+            fill: true
+        });
+        
+        colorIndex++;
+    });
+    
+    depreciationCharts.expenseChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.yearLabels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Annual Depreciation Expense by Method',
+                    font: { size: 16, weight: 'bold' },
+                    padding: 20
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: { padding: 20, font: { size: 12 } }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: $${context.parsed.y.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: 'Year' },
+                    grid: { drawBorder: false }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Depreciation Expense ($)' },
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * Create Book Value Over Time Chart
+ */
+function initializeBookValueChart(chartData) {
+    // Note: For now, this prepares the structure for future expansion
+    // Additional canvases can be added to HTML to display this chart
+    console.log('📊 Book value chart data prepared');
+}
+
+/**
+ * Create Cumulative Depreciation Chart
+ */
+function initializeCumulativeDepreciationChart(chartData) {
+    // Note: For now, this prepares the structure for future expansion
+    // Additional canvases can be added to HTML to display this chart
+    console.log('📊 Cumulative depreciation chart data prepared');
 }
 
 // ===== DOM Content Loaded =====
@@ -282,4 +448,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('- calculateStraightLine:', typeof calculateStraightLine);
     console.log('- calculateDecliningBalance:', typeof calculateDecliningBalance);
     console.log('- calculateSumOfYearsDigits:', typeof calculateSumOfYearsDigits);
+    console.log('- initializeAdvancedCharts:', typeof initializeAdvancedCharts);
 });
